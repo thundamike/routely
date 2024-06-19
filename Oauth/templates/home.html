@@ -1,0 +1,473 @@
+<!DOCTYPE html>
+{% load static %}
+<html>
+  <head>
+    <title>Run Crafter</title>
+    <link
+      href="https://api.mapbox.com/mapbox-gl-js/v2.14.1/mapbox-gl.css"
+      rel="stylesheet"
+    />
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://api.mapbox.com/mapbox-gl-js/v2.14.1/mapbox-gl.js"></script>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        background-color: #f5f5f5;
+        margin: 0;
+        padding: 0;
+      }
+
+      .header {
+        background-color: #3498db;
+        color: white;
+        padding: 20px;
+        text-align: center;
+      }
+
+      .header h1 {
+        margin: 0;
+      }
+
+      .container {
+        padding: 20px;
+      }
+
+      .form-group {
+        margin-bottom: 20px;
+      }
+
+      .form-group label {
+        display: block;
+        font-weight: bold;
+        margin-bottom: 5px;
+      }
+
+      .form-group input[type="range"] {
+        width: 20%;
+        -webkit-appearance: none;
+        appearance: none;
+        height: 8px;
+        background: #d3d3d3;
+        outline: none;
+        opacity: 0.7;
+        transition: opacity 0.2s;
+        border-radius: 5px;
+      }
+
+      .form-group input[type="range"]::-webkit-slider-thumb {
+        -webkit-appearance: none;
+        appearance: none;
+        width: 25px;
+        height: 25px;
+        background: #3498db;
+        cursor: pointer;
+        border-radius: 50%;
+        box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+        transition: background 0.3s, transform 0.3s;
+      }
+
+      .form-group input[type="range"]::-webkit-slider-thumb:hover {
+        background: #2980b9;
+        transform: scale(1.2);
+      }
+
+      .form-group input[type="range"]::-moz-range-thumb {
+        width: 25px;
+        height: 25px;
+        background: #3498db;
+        cursor: pointer;
+        border-radius: 50%;
+        box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+        transition: background 0.3s, transform 0.3s;
+      }
+
+      .form-group input[type="range"]::-moz-range-thumb:hover {
+        background: #2980b9;
+        transform: scale(1.2);
+      }
+
+      .form-group input[type="number"] {
+            -webkit-appearance: none;
+            -moz-appearance: textfield;
+            appearance: textfield;
+            width: 70px;
+            padding: 5px;
+            font-size: 1.2em;
+            border: 2px solid #3498db;
+            border-radius: 5px;
+            outline: none;
+            box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+            transition: border-color 0.3s, box-shadow 0.3s;
+        }
+
+        .form-group input[type="number"]:hover,
+        .form-group input[type="number"]:focus {
+            border-color: #2980b9;
+            box-shadow: 0 0 8px rgba(0, 0, 0, 0.3);
+        }
+
+        .form-group input[type="number"]::-webkit-inner-spin-button,
+        .form-group input[type="number"]::-webkit-outer-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+        }
+
+        .form-group input[type="number"]::-moz-inner-spin-button,
+        .form-group input[type="number"]::-moz-outer-spin-button {
+            appearance: none;
+            margin: 0;
+        }
+
+      .form-group .activity-label {
+            display: block;
+            margin-bottom: 10px;
+        }
+        .form-group .checkbox-group {
+            display: inline-flex;
+            align-items: center;
+            margin-right: 10px;
+        }
+        .form-group .checkbox-group input[type="checkbox"] {
+            display: none;
+        }
+        .form-group .checkbox-group label {
+            padding: 7px 15px;
+            background-color: #3498db;
+            color: white;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background 0.3s, transform 0.3s;
+        }
+        .form-group .checkbox-group input[type="checkbox"]:checked + label {
+            background-color: #2980b9;
+            transform: scale(1.05);
+        }
+
+      .form-group p {
+        margin: 5px 0 0;
+      }
+
+      .form-group input[type="text"] {
+        width: 30%;
+        height: 40px;
+        padding: 0 10px;
+        background: #f1f1f1;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+        transition: background 0.3s, transform 0.3s;
+        }
+
+      .form-group input[type="text"]:focus {
+        background: #c3cdd3;
+        border-color: #2980b9;
+        box-shadow: 0 0 8px rgba(0, 0, 0, 0.2);
+        transform: scale(1.02);
+        outline: none;
+        }
+
+      .button5 {
+        display: inline-block;
+        padding: 10px 20px;
+        background-color: #3498db;
+        color: #fff;
+        font-size: 14px;
+        font-weight: bold;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        transition: background-color 0.3s;
+      }
+
+      .button5:hover {
+        background-color: #2980b9;
+      }
+
+      #map {
+        width: 100%;
+        height: 400px;
+        margin-top: 20px;
+      }
+
+      #routesTable {
+        border-collapse: collapse;
+        width: 30%;
+        margin-top: 20px;
+        display: none;
+      }
+
+      #routesTable th,
+      #routesTable td {
+        border: 1px solid #ddd;
+        padding: 10px;
+        text-align: left;
+      }
+
+      #routesTable th {
+        background-color: #3498db;
+        color: white;
+      }
+
+      #routesTable tr:hover {
+        background-color: #f1f1f1;
+        cursor: pointer
+      }
+    </style>
+    <link rel="stylesheet" type="text/css" href="{% static 'styles.css' %}" />
+    <link rel="icon" href="favicon.ico" type="image/x-icon">
+    <title>Run Crafter</title>
+  </head>
+  <body>
+    <div class="header">
+      <h1>Run Crafter</h1>
+      <p>(not really just for runs!)</p>
+    </div>
+    <div class="container">
+      <form method="get" action="{% url 'craft_runs' %}">
+        <div class="form-group">
+          <label for="distanceSlider">How far do you want to go?</label>
+          <input
+            type="range"
+            id="distanceSlider"
+            name="distanceSlider"
+            min="0"
+            max="30"
+            step="1"
+            value="5"
+          />
+          <p>Miles: <span id="distanceValue"></span></p>
+        </div>
+        <div class="form-group">
+          <label for="elevationSlider">Preference on elevation gain? (zero works great...) </label>
+          <input
+            type="range"
+            id="elevationSlider"
+            name="elevationSlider"
+            min="0"
+            max="2000"
+            step="50"
+            value="100"
+          />
+          <p>Feet: <span id="elevationValue"></span></p>
+        </div>
+        <div class="form-group">
+          <label for="location">Where do you want to go?</label>
+          <input
+            type="text"
+            id="location",
+            name="location"
+            placeholder="Give as City, State"
+          />
+        </div>
+        <div class="form-group">
+          <label for="radiusSlider">Search radius? (recommended is 5-10 miles)</label>
+          <input
+            type="range"
+            id="radiusSlider"
+            name="radiusSlider"
+            min="0"
+            max="50"
+            step="1"
+            value="5"
+          />
+          <p>Miles: <span id="radiusValue"></span></p>
+        </div>
+        <div class="form-group">
+          <label class="activity-label" for="activity">What type of activity?</label>
+          <div class="checkbox-group">
+              <input type="checkbox" id="run" name="run" value="unchecked">
+              <label for="run">Run</label>
+          </div>
+          <div class="checkbox-group">
+              <input type="checkbox" id="bike" name="bike" value="unchecked">
+              <label for="bike">Bike</label>
+          </div>
+      </div>
+
+      <div class="form-group">
+        <label for="quantity">How many routes? (capped at 20 to limit chaos)</label>
+        <input type="number" id="quantity" name="quantity" min="1" max="20" value="5" step="1">
+    </div>
+
+        <button class="button5" id="findRuns" type="submit">Find Me Routes!</button>
+      </form>
+      <div id="map"></div>
+      <table id="routesTable">
+        <thead>
+          <tr>
+            <th>Route Name</th>
+            <th>Distance</th>
+            <th>Elevation Gain</th>
+            <th>Location</th>
+
+          </tr>
+        </thead>
+        <tbody>
+          {% if results %}
+          {% for route in results %}
+          <tr data-route-id="{{ forloop.counter0 }}">
+            <td>{{ route.name }}</td>
+            <td>{{ route.distance }} mi</td>
+            <td>{{ route.total_elevation_gain }} ft</td>
+            <td>{{ route.location_city }}, {{ route.location_state }}</td>
+
+          </tr>
+          {% endfor %}
+          {% elif city_only %}
+          <tr>
+            <td colspan="3">No {{mode}} routes yet in {{city_only}} like what you're looking for. Have your friends use the site!
+            </td>
+          </tr>
+          {% else %}
+          <tr>
+            <td colspan="3"> Try looking for another city. We just default to Madison, which doesn't currently have any routes like what you're looking for.
+            </td>
+          </tr>
+          {% endif %}
+        </tbody>
+      </table>
+    </div>
+    <script>
+      const distanceSlider = document.getElementById("distanceSlider");
+      const distanceValue = document.getElementById("distanceValue");
+      const elevationSlider = document.getElementById("elevationSlider");
+      const elevationValue = document.getElementById("elevationValue");
+      const locationText = document.getElementById("location");
+      const runButton = document.getElementById("run")
+      const bikeButton = document.getElementById("bike")
+      const radiusSlider = document.getElementById("radiusSlider");
+      const radiusValue = document.getElementById("radiusValue");
+      const quantity = document.getElementById("quantity");
+
+
+      // set distance, elevation vals based on request
+      distanceSlider.value = "{{distance}}"
+      distanceValue.textContent = "{{distance}}"
+      elevationSlider.value = "{{elevation}}"
+      elevationValue.textContent = "{{elevation}}"
+      console.log("{{city}}")
+      if ("{{city}}" !== "None") {
+        locationText.value = "{{city}}"
+      }
+      radiusSlider.value = "{{radius}}"
+      radiusValue.textContent = "{{radius}}"
+      quantity.value = "{{quantity}}"
+
+
+      distanceSlider.addEventListener("input", () => {
+        distanceValue.textContent = distanceSlider.value;
+      });
+
+      elevationSlider.addEventListener("input", () => {
+        elevationValue.textContent = elevationSlider.value;
+      });
+
+      radiusSlider.addEventListener("input", () => {
+        radiusValue.textContent = radiusSlider.value;
+      });
+
+      quantity.addEventListener('input', () => {
+        let value = parseInt(quantityInput.value);
+        const min = parseInt(quantityInput.min);
+        const max = parseInt(quantityInput.max);
+
+        if (value < min) {
+          quantityInput.value = min;
+        } else if (value > max) {
+            quantityInput.value = max;
+          }
+        });
+       
+
+      runButton.addEventListener('change', () => {
+        if (runButton.checked) {
+          bikeButton.checked = false
+          runButton.value = "checked"
+          bikeButton.value = "unchecked"
+        }
+        else {
+          runButton.value = "unchecked"
+        }
+      })
+
+      bikeButton.addEventListener('change', () => {
+        if (bikeButton.checked) {
+          runButton.checked = false
+          bikeButton.value = "checked"
+          runButton.value = "unchecked"
+        }
+        else {
+          bikeButton.value = "false"
+        }
+      })
+
+      mapboxgl.accessToken = "{{ MAPBOX_KEY }}";
+      const coords = "{{ coords }}";
+      const lat = "{{center_latitude}}"
+      const long = "{{center_longitude}}"
+      const map = new mapboxgl.Map({
+        container: "map",
+        center: [long, lat],
+        zoom: "{{zoom}}", 
+        style: "mapbox://styles/mapbox/streets-v11",
+      });
+
+      if ("{{ routes }}" === "True") {
+        document.getElementById("routesTable").style.display = "table";
+        const lines = JSON.parse("{{ lines|safe }}");
+
+        lines.forEach((line, index) => {
+          const route = line.map(coord => [coord[0], coord[1]]);
+          const id = `route${index}`;
+
+          map.on("load", () => {
+            map.addSource(id, {
+              type: "geojson",
+              data: {
+                type: "Feature",
+                properties: {},
+                geometry: {
+                  type: "LineString",
+                  coordinates: route,
+                },
+              },
+            });
+            map.addLayer({
+              id: id,
+              type: "line",
+              source: id,
+              layout: {
+                "line-join": "round",
+                "line-cap": "round",
+              },
+              paint: {
+                "line-color": "#FF8C00",
+                "line-width": 6,
+                "line-opacity": 0.7
+              },
+            });
+          });
+        });
+
+        let selectedRouteId = null;
+        const table = document.getElementById("routesTable");
+        table.addEventListener("click", function (event) {
+          const target = event.target;
+          if (target.tagName === "TD") {
+            const routeId = target.parentElement.getAttribute("data-route-id");
+            if (routeId) {
+              if (routeId !== selectedRouteId && selectedRouteId) {
+                map.setPaintProperty("route" + selectedRouteId, "line-color", "#FF8C00");
+                map.setPaintProperty("route" + selectedRouteId, "line-opacity", 0.3);
+              }
+              map.setPaintProperty("route" + routeId, "line-color", "#000000");
+              map.setPaintProperty("route" + routeId, "line-opacity", 1);
+              map.moveLayer("route" + routeId);
+              selectedRouteId = routeId;
+            }
+          }
+        });
+      }
+    </script>
+  </body>
+</html>

@@ -10,16 +10,6 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.2/ref/settings/
 """
 
-
-AUTHENTICATION_BACKENDS = (
-    'social_core.backends.strava.StravaOAuth',
-    'django.contrib.auth.backends.ModelBackend',
-)
-SOCIAL_AUTH_LOGIN_REDIRECT_URL = '/connected/'
-SOCIAL_AUTH_STRAVA_SCOPE = ['activity:read_all']
-SOCIAL_AUTH_STRAVA_KEY = '114433' #Client ID from API Application
-SOCIAL_AUTH_STRAVA_SECRET = 'a4cbbad510435e4dd6c5080c486de828fb7e7752' # Client Secret from API Application
-
 from pathlib import Path
 import os
 from dotenv import load_dotenv
@@ -27,15 +17,15 @@ load_dotenv()
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
-STATICFILES_DIRS = os.path.join(BASE_DIR, 'static'),
-STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles_build', 'static')
+STATICFILES_DIRS = [os.path.join(BASE_DIR, "Oauth/static")]
 STATIC_URL = "static/"
+STATIC_ROOT = os.path.join(BASE_DIR, "Oauth/staticfiles")
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-^1v%x+mpm$&hh36!0$in4v8(d&#^d!@qeg8lh+gvzl*ge79m&='
+SECRET_KEY = os.environ.get("SECRET_KEY"),
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True

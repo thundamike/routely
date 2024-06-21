@@ -20,7 +20,7 @@
       crossorigin="anonymous"
     />
     <link rel="icon" href="favicon.ico" type="image/x-icon">
-    <title>Run Crafter</title>
+    <title>Route Crafter</title>
     <style>
       /* CSS */
       .button-5 {
@@ -112,35 +112,35 @@
   </head>
   <body>
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
-      <a class="navbar-brand" href="#">Run Crafter</a>
+      <a class="navbar-brand" href="#">Route Crafter</a>
     </nav>
     <header class="jumbotron text-center">
-      <h1 class="display-4" style="color: #2c3e50;">Welcome to Run Crafter</h1>
-      <p class="lead" style="color: #2c3e50; text-shadow: none;"">A new way of creating your running or biking experiences.</p>
+      <h1 class="display-4" style="color: #2c3e50;">Welcome to Route Crafter!</h1>
+      <p class="lead" style="color: #2c3e50; text-shadow: none;"">A new way of finding running or biking routes</p>
       <hr class="my-4" >
-      <p style="color: #2c3e50; text-shadow: none;"">Go straight to finding a route, or connect with Strava to upload your own!</p>
+      <p style="color: #2c3e50; text-shadow: none;"">Go straight to finding a route, or connect with Strava to contribute your own!</p>
       <a class="button-5" href="{% url 'crafter' %}" role="button" style="background-color: #3498db;">Find a route</a>
       <a class="button-5" href="{% url 'strava_signon' %}" role="button" style="background-color: #fc4c02;">Connect to Strava</a>
     </header>
     <div class="container">
       <div class="row">
         <div class="col-md-4">
-          <h3>Track Your Runs</h3>
-          <p>Organize your favorite routes and stay motivated with community-contributed runs.</p>
+          <h3>Quickly find your ideal route</h3>
+          <p>Filter by distance, elevation, and your corner of the world.</p>
         </div>
         <div class="col-md-4">
-          <h3>Visualize routes</h3>
-          <p>See where there is to run if you travel to a new place, or want to explore a new part of town.</p>
+          <h3>Discover new runs and rides</h3>
+          <p>See where there is to go if you travel to a new place, or want to explore a new part of town.</p>
         </div>
         <div class="col-md-4">
-          <h3>Join a Community</h3>
-          <p>Connect with fellow runners and share your journey.</p>
+          <h3>Stay tuned for future stuff!</h3>
+          <p>Route reviews, llm route naming, greater selections...but obviously dark mode before any of this.</p>
         </div>
       </div>
     </div>
     <footer class="footer bg-light text-center py-4">
       <div class="container">
-        <span class="text-muted">Run Crafter created by Michael Kuhn and Kaleb Kohn</span>
+        <span class="text-muted">Route Crafter created by Michael Kuhn and Kaleb Kohn</span>
       </div>
     </footer>
   </body>

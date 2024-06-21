@@ -30,7 +30,7 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles_build', 'static')
 SECRET_KEY = os.environ.get("SECRET_KEY"),
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 # ['127.0.0.1', '.vercel.app']
 ALLOWED_HOSTS = ['*'] 

@@ -23,7 +23,7 @@ from Oauth import views as oauth_views
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', oauth_views.login, name='login'),
-    re_path(r'^(?:.*)/?$', oauth_views.login),
+    #re_path(r'^(?:.*)/?$', oauth_views.login),
     path('', include('Oauth.urls')),
     path('craft_runs/', include('runcrafter.urls'))
 ]
